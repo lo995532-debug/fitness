@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>健康 & 力量紀錄</title>
+    <style>
+        :root {
+            --primary: #4A6FA5;
+            --primary-light: #EBF1F5;
+            --secondary: #47B881;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #2D3748;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 80px;
+            line-height: 1.5;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .date-picker {
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            display: flex;
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: bold;
+            border-top: 2px solid var(--primary);
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .protein-progress {
+            margin: 12px 0;
+        }
+
+        .progress-bar-bg {
+            background: var(--primary-light);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .info-box {
+            background: #EFF6FF;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 60px;
+        }
+
+        .exercise-item {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .exercise-meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .sets-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .set-input {
+            text-align: center;
+            padding: 6px 4px;
+            font-size: 0.85rem;
+        }
+
+        .warmup-list {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .warmup-list li {
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .warmup-list input[type="checkbox"] {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>健康 & 力量紀錄</h1>
+    <input type="date" id="currentDate" class="date-picker">
+</div>
+
+<div class="container">
+    <!-- 頁籤 1：飲食紀錄 -->
+    <div id="dietTab" class="tab-content active">
+        <div class="card">
+            <div class="card-title">
+                <span>🥛 今日蛋白質追蹤</span>
+                <span id="proteinCount">0 / 4-5 份</span>
+            </div>
+            <div class="protein-progress">
+                <div class="progress-bar-bg">
+                    <div id="proteinBar" class="progress-bar-fill"></div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn" onclick="addProtein(-0.5)">- 0.5 份</button>
+                <button class="btn btn-primary" onclick="addProtein(0.5)">+ 0.5 份</button>
+                <button class="btn btn-primary" onclick="addProtein(1)">+ 1 份</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">💡 一份蛋白質怎麼看？</div>
+            <div class="info-box">
+                <strong>一份蛋白質 ≈ 7克蛋白質：</strong><br>
+                • 雞蛋 1 顆<br>
+                • 無糖豆漿 190c.c.<br>
+                • 鮮奶 / 優格 210c.c.<br>
+                • 豆腐 半盒 (約140g)<br>
+                • 雞胸肉 / 瘦肉 / 魚肉 35g (約半個掌心大)<br>
+                • 豆干 2 塊
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🍽️ 餐點紀錄</div>
+            <div class="form-group">
+                <label>早餐</label>
+                <input type="text" id="breakfast" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+            </div>
+            <div class="form-group">
+                <label>午餐</label>
+                <input type="text" id="lunch" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+            </div>
+            <div class="form-group">
+                <label>晚餐</label>
+                <input type="text" id="dinner" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+            </div>
+            <div class="form-group">
+                <label>點心</label>
+                <input type="text" id="snack" class="form-control" placeholder="點心紀錄" onchange="saveDietData()">
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 2：運動課表 -->
+    <div id="workoutTab" class="tab-content">
+        <div class="btn-group" style="margin-bottom: 16px;">
+            <button class="btn btn-primary" id="btnPlanA" onclick="switchPlan('A')">🏋🏻‍♀️ A 課表</button>
+            <button class="btn" id="btnPlanB" onclick="switchPlan('B')">🏋🏻‍♀️ B 課表</button>
+        </div>
+
+        <!-- A 課表 -->
+        <div id="planA">
+            <div class="card">
+                <div class="card-title">🔥 暖身 (5分鐘)</div>
+                <ul class="warmup-list">
+                    <li><label><input type="checkbox"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox"> 臀橋 × 10</label></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="exercise-item">
+                    <div class="exercise-name">A1 壺鈴硬舉 (8kg)</div>
+                    <div class="exercise-meta">目標：8–12下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a1_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a1_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a1_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a1_s4" placeholder="組4">
+                    </div>
+                    <input type="text" class="form-control" id="a1_note" placeholder="備註">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A2 杯式深蹲 (8kg / 徒手)</div>
+                    <div class="exercise-meta">目標：8–15下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a2_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a2_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a2_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a2_s4" placeholder="組4">
+                    </div>
+                    <input type="text" class="form-control" id="a2_note" placeholder="備註">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A3 斜板伏地挺身</div>
+                    <div class="exercise-meta">目標：6–15下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a3_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a3_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a3_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a3_s4" placeholder="組4">
+                    </div>
+                    <input type="text" class="form-control" id="a3_height" placeholder="支撐高度 (例如：沙發/桌邊)">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A4 單手壺鈴划船 (8kg)</div>
+                    <div class="exercise-meta">左手組數</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a4_l_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a4_l_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a4_l_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a4_l_s4" placeholder="組4">
+                    </div>
+                    <div class="exercise-meta">右手組數</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a4_r_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a4_r_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a4_r_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a4_r_s4" placeholder="組4">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A5 臀橋／臀推 (徒手 / 8kg)</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a5_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a5_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a5_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a5_s4" placeholder="組4">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A6 彈力帶側走 (步/側)</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="a6_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="a6_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="a6_s3" placeholder="組3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- B 課表 -->
+        <div id="planB" style="display: none;">
+            <div class="card">
+                <div class="card-title">🔥 暖身 (5分鐘)</div>
+                <ul class="warmup-list">
+                    <li><label><input type="checkbox"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox"> 臀橋 × 10</label></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="exercise-item">
+                    <div class="exercise-name">B1 分腿蹲 (徒手 / 8kg)</div>
+                    <div class="exercise-meta">左腳</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b1_l_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b1_l_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b1_l_s3" placeholder="組3">
+                    </div>
+                    <div class="exercise-meta">右腳</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b1_r_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b1_r_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b1_r_s3" placeholder="組3">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B2 壺鈴羅馬尼亞硬舉 (8kg)</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b2_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b2_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b2_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b2_s4" placeholder="組4">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B3 斜板伏地挺身</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b3_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b3_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b3_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b3_s4" placeholder="組4">
+                    </div>
+                    <input type="text" class="form-control" id="b3_height" placeholder="支撐高度">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B4 單手壺鈴划船 (8kg)</div>
+                    <div class="exercise-meta">左手</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b4_l_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b4_l_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b4_l_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b4_l_s4" placeholder="組4">
+                    </div>
+                    <div class="exercise-meta">右手</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b4_r_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b4_r_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b4_r_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b4_r_s4" placeholder="組4">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B5 臀橋／臀推 (徒手 / 8kg)</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b5_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b5_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b5_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b5_s4" placeholder="組4">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B6 DeadBug 死蟲式</div>
+                    <div class="exercise-meta">左</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b6_l_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b6_l_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b6_l_s3" placeholder="組3">
+                    </div>
+                    <div class="exercise-meta">右</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b6_r_s1" placeholder="組1">
+                        <input type="number" class="form-control set-input" id="b6_r_s2" placeholder="組2">
+                        <input type="number" class="form-control set-input" id="b6_r_s3" placeholder="組3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 3：身體數據 -->
+    <div id="bodyTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">📏 身體數據紀錄</div>
+            <div class="form-group">
+                <label>體重 (kg)</label>
+                <input type="number" step="0.1" id="weight" class="form-control" placeholder="例如：52.5" onchange="saveBodyData()">
+            </div>
+            <div class="form-group">
+                <label>腰圍 (cm)</label>
+                <input type="number" step="0.1" id="waist" class="form-control" placeholder="例如：65" onchange="saveBodyData()">
+            </div>
+            <div class="form-group">
+                <label>臀圍 (cm)</label>
+                <input type="number" step="0.1" id="hip" class="form-control" placeholder="例如：90" onchange="saveBodyData()">
+            </div>
+            <div class="form-group">
+                <label>心情或身體狀況備註</label>
+                <textarea id="bodyNote" class="form-control" placeholder="今天精神很好、生理期第1天..." onchange="saveBodyData()"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部導覽列 -->
+<div class="nav">
+    <button class="nav-item active" onclick="switchTab('diet')">🥗 飲食</button>
+    <button class="nav-item" onclick="switchTab('workout')">🏋🏻‍♀️ 運動</button>
+    <button class="nav-item" onclick="switchTab('body')">📊 數據</button>
+</div>
+
+<script>
+    let currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById('currentDate').value = currentDate;
+
+    // 日期變更事件
+    document.getElementById('currentDate').addEventListener('change', (e) => {
+        currentDate = e.target.value;
+        loadAllData();
+    });
+
+    // 頁籤切換
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        if(tabName === 'diet') {
+            document.getElementById('dietTab').classList.add('active');
+            event.currentTarget.classList.add('active');
+        } else if(tabName === 'workout') {
+            document.getElementById('workoutTab').classList.add('active');
+            event.currentTarget.classList.add('active');
+        } else if(tabName === 'body') {
+            document.getElementById('bodyTab').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    // AB 課表切換
+    function switchPlan(plan) {
+        if(plan === 'A') {
+            document.getElementById('planA').style.display = 'block';
+            document.getElementById('planB').style.display = 'none';
+            document.getElementById('btnPlanA').classList.add('btn-primary');
+            document.getElementById('btnPlanB').classList.remove('btn-primary');
+        } else {
+            document.getElementById('planA').style.display = 'none';
+            document.getElementById('planB').style.display = 'block';
+            document.getElementById('btnPlanB').classList.add('btn-primary');
+            document.getElementById('btnPlanA').classList.remove('btn-primary');
+        }
+    }
+
+    // 蛋白質計算
+    let currentProtein = 0;
+    function addProtein(val) {
+        currentProtein = Math.max(0, currentProtein + val);
+        updateProteinUI();
+        saveDietData();
+    }
+
+    function updateProteinUI() {
+        document.getElementById('proteinCount').innerText = `${currentProtein} / 4-5 份`;
+        let percentage = Math.min(100, (currentProtein / 5) * 100);
+        document.getElementById('proteinBar').style.width = percentage + '%';
+    }
+
+    // 儲存飲食資料
+    function saveDietData() {
+        let data = {
+            protein: currentProtein,
+            breakfast: document.getElementById('breakfast').value,
+            lunch: document.getElementById('lunch').value,
+            dinner: document.getElementById('dinner').value,
+            snack: document.getElementById('snack').value
+        };
+        localStorage.setItem(`diet_${currentDate}`, JSON.stringify(data));
+    }
+
+    // 儲存身體數據
+    function saveBodyData() {
+        let data = {
+            weight: document.getElementById('weight').value,
+            waist: document.getElementById('waist').value,
+            hip: document.getElementById('hip').value,
+            note: document.getElementById('bodyNote').value
+        };
+        localStorage.setItem(`body_${currentDate}`, JSON.stringify(data));
+    }
+
+    // 儲存運動資料（含暖身勾選狀態）
+    function saveWorkoutData() {
+        let inputs = document.querySelectorAll('#workoutTab input');
+        let data = {
+            inputs: {},
+            checkboxes: {}
+        };
+        
+        inputs.forEach((input, index) => {
+            if (input.type === 'checkbox') {
+                data.checkboxes[index] = input.checked;
+            } else if (input.id) {
+                data.inputs[input.id] = input.value;
+            }
+        });
+        localStorage.setItem(`workout_${currentDate}`, JSON.stringify(data));
+    }
+
+    // 為所有運動輸入框與暖身勾選框綁定自動儲存事件
+    function attachWorkoutListeners() {
+        let inputs = document.querySelectorAll('#workoutTab input');
+        inputs.forEach(input => {
+            input.removeEventListener('change', saveWorkoutData);
+            input.addEventListener('change', saveWorkoutData);
+        });
+    }
+
+    // 載入當天所有資料
+    function loadAllData() {
+        // 1. 載入飲食
+        let dietData = JSON.parse(localStorage.getItem(`diet_${currentDate}`)) || {};
+        currentProtein = dietData.protein || 0;
+        updateProteinUI();
+        document.getElementById('breakfast').value = dietData.breakfast || '';
+        document.getElementById('lunch').value = dietData.lunch || '';
+        document.getElementById('dinner').value = dietData.dinner || '';
+        document.getElementById('snack').value = dietData.snack || '';
+
+        // 2. 載入身體數據
+        let bodyData = JSON.parse(localStorage.getItem(`body_${currentDate}`)) || {};
+        document.getElementById('weight').value = bodyData.weight || '';
+        document.getElementById('waist').value = bodyData.waist || '';
+        document.getElementById('hip').value = bodyData.hip || '';
+        document.getElementById('bodyNote').value = bodyData.note || '';
+
+        // 3. 載入運動與暖身勾選
+        let workoutData = JSON.parse(localStorage.getItem(`workout_${currentDate}`)) || {};
+        let inputs = document.querySelectorAll('#workoutTab input');
+        
+        // 清空重置
+        inputs.forEach(input => {
+            if (input.type === 'checkbox') input.checked = false;
+            else if (input.type === 'number' || input.type === 'text') input.value = '';
+        });
+
+        // 填入紀錄資料
+        if (workoutData.inputs) {
+            Object.keys(workoutData.inputs).forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.value = workoutData.inputs[id];
+            });
+        }
+        if (workoutData.checkboxes) {
+            Object.keys(workoutData.checkboxes).forEach(index => {
+                if (inputs[index] && inputs[index].type === 'checkbox') {
+                    inputs[index].checked = workoutData.checkboxes[index];
+                }
+            });
+        }
+
+        attachWorkoutListeners();
+    }
+
+    // 首次載入
+    loadAllData();
+</script>
+
+</body>
+</html>
