@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>健康 & 力量紀錄</title>
+    <title>全方位生活與健康日誌</title>
     <style>
         :root {
             --primary: #4A6FA5;
@@ -28,7 +28,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px;
+            padding-bottom: 90px;
             line-height: 1.5;
         }
 
@@ -45,7 +45,7 @@
         }
 
         .header h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--primary);
         }
 
@@ -65,13 +65,14 @@
             display: flex;
             border-top: 1px solid var(--border);
             z-index: 100;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.03);
         }
 
         .nav-item {
             flex: 1;
-            padding: 12px 0;
+            padding: 10px 0;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-light);
             background: none;
             border: none;
@@ -149,6 +150,7 @@
             font-weight: 600;
             cursor: pointer;
             flex: 1;
+            font-size: 0.9rem;
         }
 
         .btn:active {
@@ -193,6 +195,83 @@
             height: 60px;
         }
 
+        /* 心理狀態與生活選擇器 */
+        .mood-options {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .mood-btn {
+            flex: 1;
+            padding: 8px 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .mood-btn.selected {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        /* 行事曆介面樣式 */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .calendar-weekday {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            padding: 4px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: #F7FAFC;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .calendar-day.active-day {
+            border-color: var(--primary);
+            background: #F0F4F8;
+        }
+
+        .calendar-day .day-num {
+            font-weight: 600;
+        }
+
+        .calendar-day .day-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            font-size: 0.6rem;
+        }
+
+        /* 運動細節 */
         .exercise-item {
             border-bottom: 1px solid var(--border);
             padding-bottom: 12px;
@@ -245,18 +324,65 @@
         .warmup-list input[type="checkbox"] {
             margin-right: 8px;
         }
+
+        /* 統計檢視 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--primary-light);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>健康 & 力量紀錄</h1>
+    <h1 id="headerTitle">📅 全方位生活日誌</h1>
     <input type="date" id="currentDate" class="date-picker">
 </div>
 
 <div class="container">
-    <!-- 頁籤 1：飲食紀錄 -->
-    <div id="dietTab" class="tab-content active">
+    <!-- 頁籤 1：行事曆總覽 -->
+    <div id="calendarTab" class="tab-content">
+        <div class="card">
+            <div class="calendar-header">
+                <button class="btn" style="flex:0; padding:4px 8px;" onclick="changeMonth(-1)">◀</button>
+                <span id="calendarMonthTitle">2026年 10月</span>
+                <button class="btn" style="flex:0; padding:4px 8px;" onclick="changeMonth(1)">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- 動態產生的月曆 -->
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">📌 當日摘要預覽</div>
+            <div id="daySummaryPreview" style="font-size: 0.9rem; color: var(--text-light);">
+                點擊上方行事曆日期，即可查看或編輯該日紀錄。
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 2：飲食紀錄 -->
+    <div id="dietTab" class="tab-content">
         <div class="card">
             <div class="card-title">
                 <span>🥛 今日蛋白質追蹤</span>
@@ -282,7 +408,7 @@
                 • 無糖豆漿 190c.c.<br>
                 • 鮮奶 / 優格 210c.c.<br>
                 • 豆腐 半盒 (約140g)<br>
-                • 雞胸肉 / 瘦肉 / 魚肉 35g (約半個掌心大)<br>
+                • 雞胸肉 / 瘦肉 / 魚肉 35g<br>
                 • 豆干 2 塊
             </div>
         </div>
@@ -291,24 +417,24 @@
             <div class="card-title">🍽️ 餐點紀錄</div>
             <div class="form-group">
                 <label>早餐</label>
-                <input type="text" id="breakfast" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+                <input type="text" id="breakfast" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
             </div>
             <div class="form-group">
                 <label>午餐</label>
-                <input type="text" id="lunch" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+                <input type="text" id="lunch" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
             </div>
             <div class="form-group">
                 <label>晚餐</label>
-                <input type="text" id="dinner" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveDietData()">
+                <input type="text" id="dinner" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
             </div>
             <div class="form-group">
                 <label>點心</label>
-                <input type="text" id="snack" class="form-control" placeholder="點心紀錄" onchange="saveDietData()">
+                <input type="text" id="snack" class="form-control" placeholder="點心紀錄" onchange="saveAllData()">
             </div>
         </div>
     </div>
 
-    <!-- 頁籤 2：運動課表 -->
+    <!-- 頁籤 3：運動課表 -->
     <div id="workoutTab" class="tab-content">
         <div class="btn-group" style="margin-bottom: 16px;">
             <button class="btn btn-primary" id="btnPlanA" onclick="switchPlan('A')">🏋🏻‍♀️ A 課表</button>
@@ -320,11 +446,11 @@
             <div class="card">
                 <div class="card-title">🔥 暖身 (5分鐘)</div>
                 <ul class="warmup-list">
-                    <li><label><input type="checkbox"> 原地走路 1 分鐘</label></li>
-                    <li><label><input type="checkbox"> 髖部活動 × 10</label></li>
-                    <li><label><input type="checkbox"> 徒手深蹲 × 8</label></li>
-                    <li><label><input type="checkbox"> 肩膀繞圈 × 10</label></li>
-                    <li><label><input type="checkbox"> 臀橋 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 臀橋 × 10</label></li>
                 </ul>
             </div>
 
@@ -333,72 +459,72 @@
                     <div class="exercise-name">A1 壺鈴硬舉 (8kg)</div>
                     <div class="exercise-meta">目標：8–12下</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a1_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a1_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a1_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a1_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a1_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
-                    <input type="text" class="form-control" id="a1_note" placeholder="備註">
+                    <input type="text" class="form-control" id="a1_note" placeholder="備註" onchange="saveAllData()">
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">A2 杯式深蹲 (8kg / 徒手)</div>
                     <div class="exercise-meta">目標：8–15下</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a2_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a2_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a2_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a2_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a2_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
-                    <input type="text" class="form-control" id="a2_note" placeholder="備註">
+                    <input type="text" class="form-control" id="a2_note" placeholder="備註" onchange="saveAllData()">
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">A3 斜板伏地挺身</div>
                     <div class="exercise-meta">目標：6–15下</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a3_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a3_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a3_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a3_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a3_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
-                    <input type="text" class="form-control" id="a3_height" placeholder="支撐高度 (例如：沙發/桌邊)">
+                    <input type="text" class="form-control" id="a3_height" placeholder="支撐高度" onchange="saveAllData()">
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">A4 單手壺鈴划船 (8kg)</div>
                     <div class="exercise-meta">左手組數</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a4_l_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a4_l_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a4_l_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a4_l_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a4_l_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
                     <div class="exercise-meta">右手組數</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a4_r_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a4_r_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a4_r_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a4_r_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a4_r_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
                 </div>
 
                 <div class="exercise-item">
-                    <div class="exercise-name">A5 臀橋／臀推 (徒手 / 8kg)</div>
+                    <div class="exercise-name">A5 臀橋／臀推</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="a5_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a5_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a5_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="a5_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="a5_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
                 </div>
 
                 <div class="exercise-item">
-                    <div class="exercise-name">A6 彈力帶側走 (步/側)</div>
+                    <div class="exercise-name">A6 彈力帶側走</div>
                     <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        <input type="number" class="form-control set-input" id="a6_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="a6_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="a6_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="a6_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a6_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a6_s3" placeholder="組3" onchange="saveAllData()">
                     </div>
                 </div>
             </div>
@@ -409,118 +535,139 @@
             <div class="card">
                 <div class="card-title">🔥 暖身 (5分鐘)</div>
                 <ul class="warmup-list">
-                    <li><label><input type="checkbox"> 原地走路 1 分鐘</label></li>
-                    <li><label><input type="checkbox"> 髖部活動 × 10</label></li>
-                    <li><label><input type="checkbox"> 徒手深蹲 × 8</label></li>
-                    <li><label><input type="checkbox"> 肩膀繞圈 × 10</label></li>
-                    <li><label><input type="checkbox"> 臀橋 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 臀橋 × 10</label></li>
                 </ul>
             </div>
 
             <div class="card">
                 <div class="exercise-item">
-                    <div class="exercise-name">B1 分腿蹲 (徒手 / 8kg)</div>
+                    <div class="exercise-name">B1 分腿蹲</div>
                     <div class="exercise-meta">左腳</div>
                     <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        <input type="number" class="form-control set-input" id="b1_l_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b1_l_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b1_l_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b1_l_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_l_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_l_s3" placeholder="組3" onchange="saveAllData()">
                     </div>
                     <div class="exercise-meta">右腳</div>
                     <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        <input type="number" class="form-control set-input" id="b1_r_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b1_r_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b1_r_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b1_r_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_r_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_r_s3" placeholder="組3" onchange="saveAllData()">
                     </div>
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">B2 壺鈴羅馬尼亞硬舉 (8kg)</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="b2_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b2_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b2_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="b2_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="b2_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">B3 斜板伏地挺身</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="b3_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b3_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b3_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="b3_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="b3_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s4" placeholder="組4" onchange="saveAllData()">
                     </div>
-                    <input type="text" class="form-control" id="b3_height" placeholder="支撐高度">
+                    <input type="text" class="form-control" id="b3_height" placeholder="支撐高度" onchange="saveAllData()">
                 </div>
 
                 <div class="exercise-item">
                     <div class="exercise-name">B4 單手壺鈴划船 (8kg)</div>
-                    <div class="exercise-meta">左手</div>
                     <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="b4_l_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b4_l_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b4_l_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="b4_l_s4" placeholder="組4">
-                    </div>
-                    <div class="exercise-meta">右手</div>
-                    <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="b4_r_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b4_r_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b4_r_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="b4_r_s4" placeholder="組4">
+                        <input type="number" class="form-control set-input" id="b4_l_s1" placeholder="左組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_l_s2" placeholder="左組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_r_s1" placeholder="右組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_r_s2" placeholder="右組2" onchange="saveAllData()">
                     </div>
                 </div>
 
                 <div class="exercise-item">
-                    <div class="exercise-name">B5 臀橋／臀推 (徒手 / 8kg)</div>
-                    <div class="sets-grid">
-                        <input type="number" class="form-control set-input" id="b5_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b5_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b5_s3" placeholder="組3">
-                        <input type="number" class="form-control set-input" id="b5_s4" placeholder="組4">
-                    </div>
-                </div>
-
-                <div class="exercise-item">
-                    <div class="exercise-name">B6 DeadBug 死蟲式</div>
-                    <div class="exercise-meta">左</div>
+                    <div class="exercise-name">B6 死蟲式 (DeadBug)</div>
                     <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        <input type="number" class="form-control set-input" id="b6_l_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b6_l_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b6_l_s3" placeholder="組3">
-                    </div>
-                    <div class="exercise-meta">右</div>
-                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        <input type="number" class="form-control set-input" id="b6_r_s1" placeholder="組1">
-                        <input type="number" class="form-control set-input" id="b6_r_s2" placeholder="組2">
-                        <input type="number" class="form-control set-input" id="b6_r_s3" placeholder="組3">
+                        <input type="number" class="form-control set-input" id="b6_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b6_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b6_s3" placeholder="組3" onchange="saveAllData()">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 頁籤 3：身體數據 -->
+    <!-- 頁籤 4：身心數據 -->
     <div id="bodyTab" class="tab-content">
         <div class="card">
-            <div class="card-title">📏 身體數據紀錄</div>
+            <div class="card-title">✨ 今日心情</div>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="selectMood('😁')">😁<br><span style="font-size:0.7rem">超棒</span></button>
+                <button class="mood-btn" onclick="selectMood('🙂')">🙂<br><span style="font-size:0.7rem">不錯</span></button>
+                <button class="mood-btn" onclick="selectMood('😐')">😐<br><span style="font-size:0.7rem">平靜</span></button>
+                <button class="mood-btn" onclick="selectMood('🙁')">🙁<br><span style="font-size:0.7rem">低落</span></button>
+                <button class="mood-btn" onclick="selectMood('😫')">😫<br><span style="font-size:0.7rem">疲憊</span></button>
+            </div>
+            <input type="hidden" id="selectedMood" onchange="saveAllData()">
+        </div>
+
+        <div class="card">
+            <div class="card-title">📏 身體與睡眠數據</div>
             <div class="form-group">
                 <label>體重 (kg)</label>
-                <input type="number" step="0.1" id="weight" class="form-control" placeholder="例如：52.5" onchange="saveBodyData()">
+                <input type="number" step="0.1" id="weight" class="form-control" placeholder="例如：52.5" onchange="saveAllData()">
             </div>
             <div class="form-group">
-                <label>腰圍 (cm)</label>
-                <input type="number" step="0.1" id="waist" class="form-control" placeholder="例如：65" onchange="saveBodyData()">
+                <label>睡眠時數 (hr)</label>
+                <input type="number" step="0.5" id="sleepHours" class="form-control" placeholder="例如：7.5" onchange="saveAllData()">
             </div>
             <div class="form-group">
-                <label>臀圍 (cm)</label>
-                <input type="number" step="0.1" id="hip" class="form-control" placeholder="例如：90" onchange="saveBodyData()">
+                <label>腰圍 / 臀圍 (cm)</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" step="0.1" id="waist" class="form-control" placeholder="腰圍" onchange="saveAllData()">
+                    <input type="number" step="0.1" id="hip" class="form-control" placeholder="臀圍" onchange="saveAllData()">
+                </div>
             </div>
             <div class="form-group">
-                <label>心情或身體狀況備註</label>
-                <textarea id="bodyNote" class="form-control" placeholder="今天精神很好、生理期第1天..." onchange="saveBodyData()"></textarea>
+                <label>事件紀錄與身體備註</label>
+                <textarea id="eventNote" class="form-control" placeholder="今天發生了什麼事、生理期或身體狀況..." onchange="saveAllData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 5：統計圖表 -->
+    <div id="statsTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">📊 本月綜合摘要</div>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="statAvgWeight">--</div>
+                    <div class="stat-label">平均體重 (kg)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statAvgSleep">--</div>
+                    <div class="stat-label">平均睡眠 (hr)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📈 體重與睡眠趨勢</div>
+            <div id="svgChartContainer" style="width: 100%; height: 160px;">
+                <!-- 純 SVG 曲線圖 -->
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📝 本月事件紀錄列表</div>
+            <div id="monthlyEventList" style="font-size: 0.85rem; color: var(--text-light);">
+                尚無事件紀錄。
             </div>
         </div>
     </div>
@@ -528,39 +675,55 @@
 
 <!-- 底部導覽列 -->
 <div class="nav">
-    <button class="nav-item active" onclick="switchTab('diet')">🥗 飲食</button>
+    <button class="nav-item active" onclick="switchTab('calendar')">📅 行事曆</button>
+    <button class="nav-item" onclick="switchTab('diet')">🥗 飲食</button>
     <button class="nav-item" onclick="switchTab('workout')">🏋🏻‍♀️ 運動</button>
     <button class="nav-item" onclick="switchTab('body')">📊 數據</button>
+    <button class="nav-item" onclick="switchTab('stats')">📈 統計</button>
 </div>
 
 <script>
-    let currentDate = new Date().toISOString().split('T')[0];
+    let currentDateObj = new Date();
+    let currentDate = formatDateStr(currentDateObj);
+    let currentViewYear = currentDateObj.getFullYear();
+    let currentViewMonth = currentDateObj.getMonth();
+
     document.getElementById('currentDate').value = currentDate;
 
-    // 日期變更事件
     document.getElementById('currentDate').addEventListener('change', (e) => {
         currentDate = e.target.value;
         loadAllData();
     });
 
-    // 頁籤切換
+    function formatDateStr(date) {
+        let y = date.getFullYear();
+        let m = String(date.getMonth() + 1).padStart(2, '0');
+        let d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
     function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
-        if(tabName === 'diet') {
+        if(tabName === 'calendar') {
+            document.getElementById('calendarTab').classList.add('active');
+            renderCalendar();
+        } else if(tabName === 'diet') {
             document.getElementById('dietTab').classList.add('active');
-            event.currentTarget.classList.add('active');
         } else if(tabName === 'workout') {
             document.getElementById('workoutTab').classList.add('active');
-            event.currentTarget.classList.add('active');
         } else if(tabName === 'body') {
             document.getElementById('bodyTab').classList.add('active');
-            event.currentTarget.classList.add('active');
+        } else if(tabName === 'stats') {
+            document.getElementById('statsTab').classList.add('active');
+            renderStats();
         }
+
+        // 對應導覽列點擊樣式
+        event && event.currentTarget && event.currentTarget.classList.add('active');
     }
 
-    // AB 課表切換
     function switchPlan(plan) {
         if(plan === 'A') {
             document.getElementById('planA').style.display = 'block';
@@ -575,12 +738,11 @@
         }
     }
 
-    // 蛋白質計算
     let currentProtein = 0;
     function addProtein(val) {
         currentProtein = Math.max(0, currentProtein + val);
         updateProteinUI();
-        saveDietData();
+        saveAllData();
     }
 
     function updateProteinUI() {
@@ -589,37 +751,35 @@
         document.getElementById('proteinBar').style.width = percentage + '%';
     }
 
-    // 儲存飲食資料
-    function saveDietData() {
+    function selectMood(mood) {
+        document.getElementById('selectedMood').value = mood;
+        document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        saveAllData();
+    }
+
+    // 統一儲存邏輯
+    function saveAllData() {
         let data = {
             protein: currentProtein,
             breakfast: document.getElementById('breakfast').value,
             lunch: document.getElementById('lunch').value,
             dinner: document.getElementById('dinner').value,
-            snack: document.getElementById('snack').value
-        };
-        localStorage.setItem(`diet_${currentDate}`, JSON.stringify(data));
-    }
-
-    // 儲存身體數據
-    function saveBodyData() {
-        let data = {
+            snack: document.getElementById('snack').value,
+            mood: document.getElementById('selectedMood').value,
             weight: document.getElementById('weight').value,
+            sleepHours: document.getElementById('sleepHours').value,
             waist: document.getElementById('waist').value,
             hip: document.getElementById('hip').value,
-            note: document.getElementById('bodyNote').value
+            eventNote: document.getElementById('eventNote').value,
+            workout: getWorkoutData()
         };
-        localStorage.setItem(`body_${currentDate}`, JSON.stringify(data));
+        localStorage.setItem(`journal_${currentDate}`, JSON.stringify(data));
     }
 
-    // 儲存運動資料（含暖身勾選狀態）
-    function saveWorkoutData() {
+    function getWorkoutData() {
         let inputs = document.querySelectorAll('#workoutTab input');
-        let data = {
-            inputs: {},
-            checkboxes: {}
-        };
-        
+        let data = { inputs: {}, checkboxes: {} };
         inputs.forEach((input, index) => {
             if (input.type === 'checkbox') {
                 data.checkboxes[index] = input.checked;
@@ -627,47 +787,42 @@
                 data.inputs[input.id] = input.value;
             }
         });
-        localStorage.setItem(`workout_${currentDate}`, JSON.stringify(data));
+        return data;
     }
 
-    // 為所有運動輸入框與暖身勾選框綁定自動儲存事件
-    function attachWorkoutListeners() {
-        let inputs = document.querySelectorAll('#workoutTab input');
-        inputs.forEach(input => {
-            input.removeEventListener('change', saveWorkoutData);
-            input.addEventListener('change', saveWorkoutData);
-        });
-    }
-
-    // 載入當天所有資料
     function loadAllData() {
-        // 1. 載入飲食
-        let dietData = JSON.parse(localStorage.getItem(`diet_${currentDate}`)) || {};
-        currentProtein = dietData.protein || 0;
+        let raw = localStorage.getItem(`journal_${currentDate}`);
+        let data = raw ? JSON.parse(raw) : {};
+
+        currentProtein = data.protein || 0;
         updateProteinUI();
-        document.getElementById('breakfast').value = dietData.breakfast || '';
-        document.getElementById('lunch').value = dietData.lunch || '';
-        document.getElementById('dinner').value = dietData.dinner || '';
-        document.getElementById('snack').value = dietData.snack || '';
 
-        // 2. 載入身體數據
-        let bodyData = JSON.parse(localStorage.getItem(`body_${currentDate}`)) || {};
-        document.getElementById('weight').value = bodyData.weight || '';
-        document.getElementById('waist').value = bodyData.waist || '';
-        document.getElementById('hip').value = bodyData.hip || '';
-        document.getElementById('bodyNote').value = bodyData.note || '';
+        document.getElementById('breakfast').value = data.breakfast || '';
+        document.getElementById('lunch').value = data.lunch || '';
+        document.getElementById('dinner').value = data.dinner || '';
+        document.getElementById('snack').value = data.snack || '';
 
-        // 3. 載入運動與暖身勾選
-        let workoutData = JSON.parse(localStorage.getItem(`workout_${currentDate}`)) || {};
+        let mood = data.mood || '';
+        document.getElementById('selectedMood').value = mood;
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            if(btn.innerText.includes(mood)) btn.classList.add('selected');
+            else btn.classList.remove('selected');
+        });
+
+        document.getElementById('weight').value = data.weight || '';
+        document.getElementById('sleepHours').value = data.sleepHours || '';
+        document.getElementById('waist').value = data.waist || '';
+        document.getElementById('hip').value = data.hip || '';
+        document.getElementById('eventNote').value = data.eventNote || '';
+
+        // 載入運動
+        let workoutData = data.workout || {};
         let inputs = document.querySelectorAll('#workoutTab input');
-        
-        // 清空重置
-        inputs.forEach(input => {
+        inputs.forEach((input, index) => {
             if (input.type === 'checkbox') input.checked = false;
             else if (input.type === 'number' || input.type === 'text') input.value = '';
         });
 
-        // 填入紀錄資料
         if (workoutData.inputs) {
             Object.keys(workoutData.inputs).forEach(id => {
                 let el = document.getElementById(id);
@@ -682,10 +837,147 @@
             });
         }
 
-        attachWorkoutListeners();
+        updateDayPreview(data);
     }
 
-    // 首次載入
+    function updateDayPreview(data) {
+        let preview = document.getElementById('daySummaryPreview');
+        if(!data.mood && !data.weight && !data.eventNote) {
+            preview.innerHTML = `📅 ${currentDate} 尚無詳細紀錄。`;
+            return;
+        }
+        preview.innerHTML = `
+            <strong>📅 ${currentDate}</strong><br>
+            心情：${data.mood || '未記錄'} ｜ 體重：${data.weight ? data.weight + ' kg' : '未記錄'} ｜ 睡眠：${data.sleepHours ? data.sleepHours + ' hr' : '未記錄'}<br>
+            事件備註：${data.eventNote || '無'}
+        `;
+    }
+
+    // 行事曆渲染
+    function renderCalendar() {
+        let title = document.getElementById('calendarMonthTitle');
+        title.innerText = `${currentViewYear}年 ${currentViewMonth + 1}月`;
+
+        let grid = document.getElementById('calendarGrid');
+        grid.innerHTML = '';
+
+        ['日', '一', '二', '三', '四', '五', '六'].forEach(w => {
+            grid.innerHTML += `<div class="calendar-weekday">${w}</div>`;
+        });
+
+        let firstDay = new Date(currentViewYear, currentViewMonth, 1).getDay();
+        let totalDays = new Date(currentViewYear, currentViewMonth + 1, 0).getDate();
+
+        for(let i=0; i<firstDay; i++) {
+            grid.innerHTML += `<div></div>`;
+        }
+
+        for(let d=1; d<=totalDays; d++) {
+            let mStr = String(currentViewMonth + 1).padStart(2, '0');
+            let dStr = String(d).padStart(2, '0');
+            let dateStr = `${currentViewYear}-${mStr}-${dStr}`;
+
+            let raw = localStorage.getItem(`journal_${dateStr}`);
+            let dayData = raw ? JSON.parse(raw) : {};
+            let indicators = '';
+            if(dayData.mood) indicators += dayData.mood;
+            if(dayData.weight) indicators += '⚖️';
+
+            let isToday = (dateStr === currentDate) ? 'active-day' : '';
+
+            grid.innerHTML += `
+                <div class="calendar-day ${isToday}" onclick="selectDateFromCalendar('${dateStr}')">
+                    <span class="day-num">${d}</span>
+                    <span class="day-indicators">${indicators}</span>
+                </div>
+            `;
+        }
+    }
+
+    function changeMonth(direction) {
+        currentViewMonth += direction;
+        if(currentViewMonth > 11) {
+            currentViewMonth = 0;
+            currentViewYear++;
+        } else if(currentViewMonth < 0) {
+            currentViewMonth = 11;
+            currentViewYear--;
+        }
+        renderCalendar();
+    }
+
+    function selectDateFromCalendar(dateStr) {
+        currentDate = dateStr;
+        document.getElementById('currentDate').value = dateStr;
+        loadAllData();
+        switchTab('body'); // 點擊後跳轉到數據頁面進行檢視或編輯
+    }
+
+    // 統計計算與圖表
+    function renderStats() {
+        let totalWeight = 0, weightCount = 0;
+        let totalSleep = 0, sleepCount = 0;
+        let eventHtml = '';
+        let chartPoints = [];
+
+        let yearMonthPrefix = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}`;
+
+        for(let i=1; i<=31; i++) {
+            let dStr = `${yearMonthPrefix}-${String(i).padStart(2, '0')}`;
+            let raw = localStorage.getItem(`journal_${dStr}`);
+            if(raw) {
+                let data = JSON.parse(raw);
+                if(data.weight) {
+                    totalWeight += parseFloat(data.weight);
+                    weightCount++;
+                    chartPoints.push({ day: i, weight: parseFloat(data.weight), sleep: parseFloat(data.sleepHours || 0) });
+                }
+                if(data.sleepHours) {
+                    totalSleep += parseFloat(data.sleepHours);
+                    sleepCount++;
+                }
+                if(data.eventNote) {
+                    eventHtml += `<div style="margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:4px;"><strong>${dStr}</strong>: ${data.eventNote}</div>`;
+                }
+            }
+        }
+
+        document.getElementById('statAvgWeight').innerText = weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : '--';
+        document.getElementById('statAvgSleep').innerText = sleepCount > 0 ? (totalSleep / sleepCount).toFixed(1) : '--';
+        document.getElementById('monthlyEventList').innerHTML = eventHtml || '本月尚無事件紀錄。';
+
+        // 繪製 SVG 曲線圖
+        let svgContainer = document.getElementById('svgChartContainer');
+        if(chartPoints.length === 0) {
+            svgContainer.innerHTML = `<div style="text-align:center; padding-top:50px; color:var(--text-light); font-size:0.85rem;">本月尚無體重數據可繪製趨勢圖</div>`;
+            return;
+        }
+
+        let minW = Math.min(...chartPoints.map(p => p.weight)) - 1;
+        let maxW = Math.max(...chartPoints.map(p => p.weight)) + 1;
+        if(minW === maxW) { minW -= 1; maxW += 1; }
+
+        let svgWidth = 300, svgHeight = 140;
+        let pointsStr = '';
+        chartPoints.forEach((p, idx) => {
+            let x = (idx / (chartPoints.length > 1 ? chartPoints.length - 1 : 1)) * (svgWidth - 40) + 20;
+            let y = svgHeight - 20 - ((p.weight - minW) / (maxW - minW)) * (svgHeight - 40);
+            pointsStr += `${x},${y} `;
+        });
+
+        svgContainer.innerHTML = `
+            <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width:100%; height:100%;">
+                <polyline fill="none" stroke="var(--primary)" stroke-width="2.5" points="${pointsStr}" />
+                ${chartPoints.map((p, idx) => {
+                    let x = (idx / (chartPoints.length > 1 ? chartPoints.length - 1 : 1)) * (svgWidth - 40) + 20;
+                    let y = svgHeight - 20 - ((p.weight - minW) / (maxW - minW)) * (svgHeight - 40);
+                    return `<circle cx="${x}" cy="${y}" r="4" fill="var(--secondary)" /><text x="${x}" y="${y - 8}" font-size="10" text-anchor="middle" fill="var(--text)">${p.weight}</text>`;
+                }).join('')}
+            </svg>
+        `;
+    }
+
+    // 初始化載入
     loadAllData();
 </script>
 
