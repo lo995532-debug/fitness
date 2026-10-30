@@ -394,4 +394,669 @@
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn"
+                <button class="btn" onclick="addProtein(-0.5)">- 0.5 份</button>
+                <button class="btn btn-primary" onclick="addProtein(0.5)">+ 0.5 份</button>
+                <button class="btn btn-primary" onclick="addProtein(1)">+ 1 份</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">💡 一份蛋白質怎麼看？</div>
+            <div class="info-box">
+                <strong>一份蛋白質 ≈ 7克蛋白質：</strong><br>
+                • 雞蛋 1 顆<br>
+                • 無糖豆漿 190c.c.<br>
+                • 鮮奶 / 優格 210c.c.<br>
+                • 豆腐 半盒 (約140g)<br>
+                • 雞胸肉 / 瘦肉 / 魚肉 35g<br>
+                • 豆干 2 塊
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🍽️ 餐點紀錄</div>
+            <div class="form-group">
+                <label>早餐</label>
+                <input type="text" id="breakfast" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label>午餐</label>
+                <input type="text" id="lunch" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label>晚餐</label>
+                <input type="text" id="dinner" class="form-control" placeholder="吃了什麼？蛋白質幾份？" onchange="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label>點心</label>
+                <input type="text" id="snack" class="form-control" placeholder="點心紀錄" onchange="saveAllData()">
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 3：運動課表 -->
+    <div id="workoutTab" class="tab-content">
+        <div class="btn-group" style="margin-bottom: 16px;">
+            <button class="btn btn-primary" id="btnPlanA" onclick="switchPlan('A')">🏋🏻‍♀️ A 課表</button>
+            <button class="btn" id="btnPlanB" onclick="switchPlan('B')">🏋🏻‍♀️ B 課表</button>
+        </div>
+
+        <!-- A 課表 -->
+        <div id="planA">
+            <div class="card">
+                <div class="card-title">🔥 暖身 (5分鐘)</div>
+                <ul class="warmup-list">
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 臀橋 × 10</label></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="exercise-item">
+                    <div class="exercise-name">A1 壺鈴硬舉 (8kg)</div>
+                    <div class="exercise-meta">目標：8–12下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a1_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a1_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                    <input type="text" class="form-control" id="a1_note" placeholder="備註" onchange="saveAllData()">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A2 杯式深蹲 (8kg / 徒手)</div>
+                    <div class="exercise-meta">目標：8–15下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a2_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a2_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                    <input type="text" class="form-control" id="a2_note" placeholder="備註" onchange="saveAllData()">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A3 斜板伏地挺身</div>
+                    <div class="exercise-meta">目標：6–15下</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a3_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a3_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                    <input type="text" class="form-control" id="a3_height" placeholder="支撐高度" onchange="saveAllData()">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A4 單手壺鈴划船 (8kg)</div>
+                    <div class="exercise-meta">左手組數</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a4_l_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_l_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                    <div class="exercise-meta">右手組數</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a4_r_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a4_r_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A5 臀橋／臀推</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="a5_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a5_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">A6 彈力帶側走</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="a6_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a6_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="a6_s3" placeholder="組3" onchange="saveAllData()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- B 課表 -->
+        <div id="planB" style="display: none;">
+            <div class="card">
+                <div class="card-title">🔥 暖身 (5分鐘)</div>
+                <ul class="warmup-list">
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 原地走路 1 分鐘</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 髖部活動 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 徒手深蹲 × 8</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 肩膀繞圈 × 10</label></li>
+                    <li><label><input type="checkbox" onchange="saveAllData()"> 臀橋 × 10</label></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="exercise-item">
+                    <div class="exercise-name">B1 分腿蹲</div>
+                    <div class="exercise-meta">左腳</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b1_l_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_l_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_l_s3" placeholder="組3" onchange="saveAllData()">
+                    </div>
+                    <div class="exercise-meta">右腳</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b1_r_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_r_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b1_r_s3" placeholder="組3" onchange="saveAllData()">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B2 壺鈴羅馬尼亞硬舉 (8kg)</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b2_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b2_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B3 斜板伏地挺身</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b3_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s3" placeholder="組3" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b3_s4" placeholder="組4" onchange="saveAllData()">
+                    </div>
+                    <input type="text" class="form-control" id="b3_height" placeholder="支撐高度" onchange="saveAllData()">
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B4 單手壺鈴划船 (8kg)</div>
+                    <div class="sets-grid">
+                        <input type="number" class="form-control set-input" id="b4_l_s1" placeholder="左組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_l_s2" placeholder="左組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_r_s1" placeholder="右組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b4_r_s2" placeholder="右組2" onchange="saveAllData()">
+                    </div>
+                </div>
+
+                <div class="exercise-item">
+                    <div class="exercise-name">B6 死蟲式 (DeadBug)</div>
+                    <div class="sets-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <input type="number" class="form-control set-input" id="b6_s1" placeholder="組1" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b6_s2" placeholder="組2" onchange="saveAllData()">
+                        <input type="number" class="form-control set-input" id="b6_s3" placeholder="組3" onchange="saveAllData()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 4：身心數據 -->
+    <div id="bodyTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">✨ 今日心情</div>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="selectMood('😁')">😁<br><span style="font-size:0.7rem">超棒</span></button>
+                <button class="mood-btn" onclick="selectMood('🙂')">🙂<br><span style="font-size:0.7rem">不錯</span></button>
+                <button class="mood-btn" onclick="selectMood('😐')">😐<br><span style="font-size:0.7rem">平靜</span></button>
+                <button class="mood-btn" onclick="selectMood('🙁')">🙁<br><span style="font-size:0.7rem">低落</span></button>
+                <button class="mood-btn" onclick="selectMood('😫')">😫<br><span style="font-size:0.7rem">疲憊</span></button>
+            </div>
+            <input type="hidden" id="selectedMood" onchange="saveAllData()">
+        </div>
+
+        <div class="card">
+            <div class="card-title">📏 身體與睡眠數據</div>
+            <div class="form-group">
+                <label>體重 (kg)</label>
+                <input type="number" step="0.1" id="weight" class="form-control" placeholder="例如：52.5" onchange="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label>睡眠時數 (hr)</label>
+                <input type="number" step="0.5" id="sleepHours" class="form-control" placeholder="例如：7.5" onchange="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label>腰圍 / 臀圍 (cm)</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" step="0.1" id="waist" class="form-control" placeholder="腰圍" onchange="saveAllData()">
+                    <input type="number" step="0.1" id="hip" class="form-control" placeholder="臀圍" onchange="saveAllData()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>事件紀錄與身體備註</label>
+                <textarea id="eventNote" class="form-control" placeholder="今天發生了什麼事、生理期或身體狀況..." onchange="saveAllData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁籤 5：統計圖表 -->
+    <div id="statsTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">📊 本月綜合摘要</div>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="statAvgWeight">--</div>
+                    <div class="stat-label">平均體重 (kg)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statAvgSleep">--</div>
+                    <div class="stat-label">平均睡眠 (hr)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📈 體重與睡眠趨勢</div>
+            <div id="svgChartContainer" style="width: 100%; height: 160px;">
+                <!-- 純 SVG 曲線圖 -->
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📝 本月事件紀錄列表</div>
+            <div id="monthlyEventList" style="font-size: 0.85rem; color: var(--text-light);">
+                尚無事件紀錄。
+            </div>
+        </div>
+
+        <!-- 🔒 資料安全備份區 -->
+        <div class="card" style="background: var(--card-bg); border: 1px dashed var(--primary);">
+            <div class="card-title" style="font-size:0.95rem;">🔒 資料安全備份區</div>
+            <p style="font-size:0.8rem; color: var(--text-light); margin-bottom: 12px;">您可以隨時將手機裡的健康與日記紀錄備份成檔案，或是將備份檔案還原到最新版本中。</p>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="exportData()" class="btn btn-primary" style="font-size:0.85rem; padding:6px 10px;">匯出備份 (JSON)</button>
+                <label class="btn" style="background: var(--secondary); color: white; font-size:0.85rem; padding:6px 10px; text-align:center; display:inline-block; cursor:pointer;">
+                    匯入還原 (JSON)
+                    <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部導覽列 -->
+<div class="nav">
+    <button class="nav-item active" onclick="switchTab('calendar')">📅 行事曆</button>
+    <button class="nav-item" onclick="switchTab('diet')">🥗 飲食</button>
+    <button class="nav-item" onclick="switchTab('workout')">🏋🏻‍♀️ 運動</button>
+    <button class="nav-item" onclick="switchTab('body')">📊 數據</button>
+    <button class="nav-item" onclick="switchTab('stats')">📈 統計</button>
+</div>
+
+<script>
+    let currentDateObj = new Date();
+    let currentDate = formatDateStr(currentDateObj);
+    let currentViewYear = currentDateObj.getFullYear();
+    let currentViewMonth = currentDateObj.getMonth();
+
+    document.getElementById('currentDate').value = currentDate;
+
+    document.getElementById('currentDate').addEventListener('change', (e) => {
+        currentDate = e.target.value;
+        currentViewYear = new Date(currentDate).getFullYear();
+        currentViewMonth = new Date(currentDate).getMonth();
+        loadAllData();
+        renderCalendar();
+    });
+
+    function formatDateStr(date) {
+        let y = date.getFullYear();
+        let m = String(date.getMonth() + 1).padStart(2, '0');
+        let d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        if(tabName === 'calendar') {
+            document.getElementById('calendarTab').classList.add('active');
+            renderCalendar();
+        } else if(tabName === 'diet') {
+            document.getElementById('dietTab').classList.add('active');
+        } else if(tabName === 'workout') {
+            document.getElementById('workoutTab').classList.add('active');
+        } else if(tabName === 'body') {
+            document.getElementById('bodyTab').classList.add('active');
+        } else if(tabName === 'stats') {
+            document.getElementById('statsTab').classList.add('active');
+            renderStats();
+        }
+
+        if(event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    function switchPlan(plan) {
+        if(plan === 'A') {
+            document.getElementById('planA').style.display = 'block';
+            document.getElementById('planB').style.display = 'none';
+            document.getElementById('btnPlanA').classList.add('btn-primary');
+            document.getElementById('btnPlanB').classList.remove('btn-primary');
+        } else {
+            document.getElementById('planA').style.display = 'none';
+            document.getElementById('planB').style.display = 'block';
+            document.getElementById('btnPlanB').classList.add('btn-primary');
+            document.getElementById('btnPlanA').classList.remove('btn-primary');
+        }
+    }
+
+    let currentProtein = 0;
+    function addProtein(val) {
+        currentProtein = Math.max(0, currentProtein + val);
+        updateProteinUI();
+        saveAllData();
+    }
+
+    function updateProteinUI() {
+        document.getElementById('proteinCount').innerText = `${currentProtein} / 4-5 份`;
+        let percentage = Math.min(100, (currentProtein / 5) * 100);
+        document.getElementById('proteinBar').style.width = percentage + '%';
+    }
+
+    function selectMood(mood) {
+        document.getElementById('selectedMood').value = mood;
+        document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+        if(event && event.currentTarget) {
+            event.currentTarget.classList.add('selected');
+        }
+        saveAllData();
+    }
+
+    function saveAllData() {
+        let data = {
+            protein: currentProtein,
+            breakfast: document.getElementById('breakfast').value,
+            lunch: document.getElementById('lunch').value,
+            dinner: document.getElementById('dinner').value,
+            snack: document.getElementById('snack').value,
+            mood: document.getElementById('selectedMood').value,
+            weight: document.getElementById('weight').value,
+            sleepHours: document.getElementById('sleepHours').value,
+            waist: document.getElementById('waist').value,
+            hip: document.getElementById('hip').value,
+            eventNote: document.getElementById('eventNote').value,
+            workout: getWorkoutData()
+        };
+        localStorage.setItem(`journal_${currentDate}`, JSON.stringify(data));
+    }
+
+    function getWorkoutData() {
+        let inputs = document.querySelectorAll('#workoutTab input');
+        let data = { inputs: {}, checkboxes: {} };
+        inputs.forEach((input, index) => {
+            if (input.type === 'checkbox') {
+                data.checkboxes[index] = input.checked;
+            } else if (input.id) {
+                data.inputs[input.id] = input.value;
+            }
+        });
+        return data;
+    }
+
+    function loadAllData() {
+        let raw = localStorage.getItem(`journal_${currentDate}`);
+        let data = raw ? JSON.parse(raw) : {};
+
+        currentProtein = data.protein || 0;
+        updateProteinUI();
+
+        document.getElementById('breakfast').value = data.breakfast || '';
+        document.getElementById('lunch').value = data.lunch || '';
+        document.getElementById('dinner').value = data.dinner || '';
+        document.getElementById('snack').value = data.snack || '';
+
+        let mood = data.mood || '';
+        document.getElementById('selectedMood').value = mood;
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            if(btn.innerText.includes(mood)) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        document.getElementById('weight').value = data.weight || '';
+        document.getElementById('sleepHours').value = data.sleepHours || '';
+        document.getElementById('waist').value = data.waist || '';
+        document.getElementById('hip').value = data.hip || '';
+        document.getElementById('eventNote').value = data.eventNote || '';
+
+        // 恢復運動資料
+        if(data.workout) {
+            if(data.workout.inputs) {
+                Object.keys(data.workout.inputs).forEach(id => {
+                    let el = document.getElementById(id);
+                    if(el) el.value = data.workout.inputs[id];
+                });
+            }
+            if(data.workout.checkboxes) {
+                let inputs = document.querySelectorAll('#workoutTab input');
+                Object.keys(data.workout.checkboxes).forEach(index => {
+                    if(inputs[index] && inputs[index].type === 'checkbox') {
+                        inputs[index].checked = data.workout.checkboxes[index];
+                    }
+                });
+            }
+        } else {
+            document.querySelectorAll('#workoutTab input').forEach(input => {
+                if(input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+        }
+    }
+
+    // 月曆渲染
+    function changeMonth(direction) {
+        currentViewMonth += direction;
+        if(currentViewMonth > 11) {
+            currentViewMonth = 0;
+            currentViewYear++;
+        } else if(currentViewMonth < 0) {
+            currentViewMonth = 11;
+            currentViewYear--;
+        }
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        let titleEl = document.getElementById('calendarMonthTitle');
+        titleEl.innerText = `${currentViewYear}年 ${currentViewMonth + 1}月`;
+
+        let gridEl = document.getElementById('calendarGrid');
+        gridEl.innerHTML = '';
+
+        let weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        weekdays.forEach(w => {
+            let div = document.createElement('div');
+            div.className = 'calendar-weekday';
+            div.innerText = w;
+            gridEl.appendChild(div);
+        });
+
+        let firstDayIndex = new Date(currentViewYear, currentViewMonth, 1).getDay();
+        let totalDays = new Date(currentViewYear, currentViewMonth + 1, 0).getDate();
+
+        for(let i = 0; i < firstDayIndex; i++) {
+            let emptyDiv = document.createElement('div');
+            gridEl.appendChild(emptyDiv);
+        }
+
+        for(let day = 1; day <= totalDays; day++) {
+            let dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            let mStr = String(currentViewMonth + 1).padStart(2, '0');
+            let dStr = String(day).padStart(2, '0');
+            let dateStr = `${currentViewYear}-${mStr}-${dStr}`;
+
+            if(dateStr === currentDate) {
+                dayDiv.classList.add('active-day');
+            }
+
+            let raw = localStorage.getItem(`journal_${dateStr}`);
+            let hasData = false;
+            let indicators = '';
+            if(raw) {
+                hasData = true;
+                let d = JSON.parse(raw);
+                if(d.mood) indicators += d.mood;
+                if(d.weight) indicators += '⚖️';
+            }
+
+            dayDiv.innerHTML = `
+                <div class="day-num">${day}</div>
+                <div class="day-indicators">${indicators}</div>
+            `;
+
+            dayDiv.onclick = () => {
+                currentDate = dateStr;
+                document.getElementById('currentDate').value = currentDate;
+                loadAllData();
+                renderCalendar();
+                document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active-day'));
+                dayDiv.classList.add('active-day');
+                updateDayPreview(dateStr);
+            };
+
+            gridEl.appendChild(dayDiv);
+        }
+        updateDayPreview(currentDate);
+    }
+
+    function updateDayPreview(dateStr) {
+        let raw = localStorage.getItem(`journal_${dateStr}`);
+        let previewEl = document.getElementById('daySummaryPreview');
+        if(raw) {
+            let d = JSON.parse(raw);
+            previewEl.innerHTML = `
+                <strong>${dateStr} 紀錄：</strong><br>
+                心情：${d.mood || '無'} | 體重：${d.weight ? d.weight + 'kg' : '無'} | 睡眠：${d.sleepHours ? d.sleepHours + 'hr' : '無'}<br>
+                備註：${d.eventNote || '無'}
+            `;
+        } else {
+            previewEl.innerHTML = `${dateStr} 尚無任何紀錄，點擊下方各頁籤開始填寫。`;
+        }
+    }
+
+    // 統計計算與圖表繪製 (支援動態月份)
+    function renderStats() {
+        let totalWeight = 0, weightCount = 0;
+        let totalSleep = 0, sleepCount = 0;
+        let eventHtml = '';
+        let chartPoints = [];
+
+        let yearMonthPrefix = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}`;
+        let daysInMonth = new Date(currentViewYear, currentViewMonth + 1, 0).getDate();
+
+        for(let i = 1; i <= daysInMonth; i++) {
+            let dStr = `${yearMonthPrefix}-${String(i).padStart(2, '0')}`;
+            let raw = localStorage.getItem(`journal_${dStr}`);
+            if(raw) {
+                let data = JSON.parse(raw);
+                if(data.weight && !isNaN(data.weight)) {
+                    totalWeight += parseFloat(data.weight);
+                    weightCount++;
+                    chartPoints.push({ day: i, weight: parseFloat(data.weight), sleep: parseFloat(data.sleepHours || 0) });
+                }
+                if(data.sleepHours && !isNaN(data.sleepHours)) {
+                    totalSleep += parseFloat(data.sleepHours);
+                    sleepCount++;
+                }
+                if(data.eventNote && data.eventNote.trim() !== '') {
+                    eventHtml += `<div style="margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:4px;"><strong>${dStr}</strong>: ${data.eventNote}</div>`;
+                }
+            }
+        }
+
+        document.getElementById('statAvgWeight').innerText = weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : '--';
+        document.getElementById('statAvgSleep').innerText = sleepCount > 0 ? (totalSleep / sleepCount).toFixed(1) : '--';
+        document.getElementById('monthlyEventList').innerHTML = eventHtml || '本月尚無事件紀錄。';
+
+        let svgContainer = document.getElementById('svgChartContainer');
+        if(chartPoints.length === 0) {
+            svgContainer.innerHTML = `<div style="text-align:center; padding-top:50px; color:var(--text-light); font-size:0.85rem;">本月尚無體重數據可繪製趨勢圖</div>`;
+            return;
+        }
+
+        let minW = Math.min(...chartPoints.map(p => p.weight)) - 1;
+        let maxW = Math.max(...chartPoints.map(p => p.weight)) + 1;
+        if(minW === maxW) { minW -= 1; maxW += 1; }
+
+        let svgWidth = 300, svgHeight = 140;
+        let pointsStr = '';
+        chartPoints.forEach((p, idx) => {
+            let x = (idx / (chartPoints.length > 1 ? chartPoints.length - 1 : 1)) * (svgWidth - 40) + 20;
+            let y = svgHeight - 20 - ((p.weight - minW) / (maxW - minW)) * (svgHeight - 40);
+            pointsStr += `${x},${y} `;
+        });
+
+        svgContainer.innerHTML = `
+            <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width:100%; height:100%;">
+                <polyline fill="none" stroke="var(--primary)" stroke-width="2.5" points="${pointsStr}" />
+                ${chartPoints.map((p, idx) => {
+                    let x = (idx / (chartPoints.length > 1 ? chartPoints.length - 1 : 1)) * (svgWidth - 40) + 20;
+                    let y = svgHeight - 20 - ((p.weight - minW) / (maxW - minW)) * (svgHeight - 40);
+                    return `<circle cx="${x}" cy="${y}" r="4" fill="var(--secondary)" /><text x="${x}" y="${y - 8}" font-size="10" text-anchor="middle" fill="var(--text)">${p.weight}</text>`;
+                }).join('')}
+            </svg>
+        `;
+    }
+
+    // JSON 備份與還原功能
+    function exportData() {
+        let backupObj = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            if (key.startsWith('journal_')) {
+                backupObj[key] = localStorage.getItem(key);
+            }
+        }
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupObj));
+        let downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `life_health_backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function importData(event) {
+        let file = event.target.files[0];
+        if (!file) return;
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let backupObj = JSON.parse(e.target.result);
+                Object.keys(backupObj).forEach(key => {
+                    localStorage.setItem(key, backupObj[key]);
+                });
+                alert('資料還原成功！網頁即將重新整理。');
+                location.reload();
+            } catch (err) {
+                alert('檔案格式錯誤，還原失敗！');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // 初始化
+    loadAllData();
+    renderCalendar();
+</script>
+
+</body>
+</html>
