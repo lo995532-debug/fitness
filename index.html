@@ -914,39 +914,44 @@
     }
 
     // 統計計算與圖表
-    function renderStats() {
+function renderStats() {
         let totalWeight = 0, weightCount = 0;
         let totalSleep = 0, sleepCount = 0;
         let eventHtml = '';
         let chartPoints = [];
 
+        // 取得目前檢視月份的字串前綴（例如 "2026-10"）
         let yearMonthPrefix = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}`;
+        
+        // 動態取得該月份的實際總天數（支援 28、29、30、31 天）
+        let daysInMonth = new Date(currentViewYear, currentViewMonth + 1, 0).getDate();
 
-        for(let i=1; i<=31; i++) {
+        for(let i = 1; i <= daysInMonth; i++) {
             let dStr = `${yearMonthPrefix}-${String(i).padStart(2, '0')}`;
             let raw = localStorage.getItem(`journal_${dStr}`);
             if(raw) {
                 let data = JSON.parse(raw);
-                if(data.weight) {
+                if(data.weight && !isNaN(data.weight)) {
                     totalWeight += parseFloat(data.weight);
                     weightCount++;
                     chartPoints.push({ day: i, weight: parseFloat(data.weight), sleep: parseFloat(data.sleepHours || 0) });
                 }
-                if(data.sleepHours) {
+                if(data.sleepHours && !isNaN(data.sleepHours)) {
                     totalSleep += parseFloat(data.sleepHours);
                     sleepCount++;
                 }
-                if(data.eventNote) {
+                if(data.eventNote && data.eventNote.trim() !== '') {
                     eventHtml += `<div style="margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:4px;"><strong>${dStr}</strong>: ${data.eventNote}</div>`;
                 }
             }
         }
 
+        // 計算並顯示正確的當月平均
         document.getElementById('statAvgWeight').innerText = weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : '--';
         document.getElementById('statAvgSleep').innerText = sleepCount > 0 ? (totalSleep / sleepCount).toFixed(1) : '--';
         document.getElementById('monthlyEventList').innerHTML = eventHtml || '本月尚無事件紀錄。';
 
-        // 繪製 SVG 曲線圖
+        // 繪製該月份的 SVG 曲線圖
         let svgContainer = document.getElementById('svgChartContainer');
         if(chartPoints.length === 0) {
             svgContainer.innerHTML = `<div style="text-align:center; padding-top:50px; color:var(--text-light); font-size:0.85rem;">本月尚無體重數據可繪製趨勢圖</div>`;
